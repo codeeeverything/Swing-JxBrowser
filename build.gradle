@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+    id 'application'
+    // Provides convenience methods for adding JxBrowser dependencies into a project.
+    id 'com.teamdev.jxbrowser' version '2.0.0'
+}
+
+group = 'com.example'
+version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+jxbrowser {
+    version = '8.14.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // FlatLaf - 现代化的Swing外观
+    implementation 'com.formdev:flatlaf:3.2.5'
+
+    // Detects the current platform and adds the corresponding Chromium binaries.
+    implementation(jxbrowser.currentPlatform)
+
+    // Adds dependency to the Swing UI toolkit integration.
+    implementation(jxbrowser.swing)
+
+
+    // 测试依赖
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+}
+
+application {
+    mainClass = 'com.example.swing.SwingDemoApp'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.withType(JavaExec) {
+    systemProperties System.getProperties()
+    jvmArgs '--add-opens=java.desktop/java.awt=ALL-UNNAMED'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.example.swing.SwingDemoApp'
+    }
+}
+
